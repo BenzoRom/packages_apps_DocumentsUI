@@ -27,7 +27,7 @@
 
     <color name="root_title_color">#deffffff</color>
     <color name="root_details_color">#8affffff</color>
-    <color name="root_focus_color">#ff424242</color>
+    <color name="root_focus_color">#ff212121</color>
 
     <color name="item_hover_color">#ff1f1f1f</color>
 
@@ -40,7 +40,7 @@
     <color name="item_doc_title">#ffcccccc</color>
     <color name="item_doc_title_disabled">@*android:color/secondary_text_default_material_dark</color>
     <color name="item_doc_details">#ffcccccc</color>
-    <color name="item_doc_background">#333333</color>
+    <color name="item_doc_background">#212121</color>
     <color name="item_doc_background_disabled">#ff212121</color>
     <color name="item_breadcrumb_background_hovered">#1affffff</color>
     <color name="item_doc_droppable_background">#ff170f04</color>
