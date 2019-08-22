@@ -307,6 +307,27 @@ class CopyJob extends ResolvedResourcesJob {
     }
 
     /**
+     * Logs progress when optimized copy.
+     *
+     * @param doc the doc current copy.
+     */
+    protected void makeOptimizedCopyProgress(DocumentInfo doc) {
+        long bytes;
+        if (doc.isDirectory()) {
+            try {
+                bytes = calculateFileSizesRecursively(getClient(doc), doc.derivedUri);
+            } catch (ResourceException | RemoteException e) {
+                // mProgressTracker should be IndeterminateProgressTracker when mProgressTracker
+                // created, so bytes don't affect tracker.
+                bytes = 0;
+            }
+        } else {
+            bytes = doc.size;
+        }
+        makeCopyProgress(bytes);
+    }
+
+    /**
      * Copies a the given document to the given location.
      *
      * @param src DocumentInfos for the documents to copy.
@@ -318,8 +339,6 @@ class CopyJob extends ResolvedResourcesJob {
      */
     void processDocument(DocumentInfo src, DocumentInfo srcParent,
             DocumentInfo dstDirInfo) throws ResourceException {
-
-        // TODO: When optimized copy kicks in, we'll not making any progress updates.
         // For now. Local storage isn't using optimized copy.
 
         // When copying within the same provider, try to use optimized copying.
@@ -330,6 +349,7 @@ class CopyJob extends ResolvedResourcesJob {
                     if (DocumentsContract.copyDocument(wrap(getClient(src)), src.derivedUri,
                             dstDirInfo.derivedUri) != null) {
                         Metrics.logFileOperated(operationType, MetricConsts.OPMODE_PROVIDER);
+                        makeOptimizedCopyProgress(src);
                         return;
                     }
                 } catch (FileNotFoundException | RemoteException | RuntimeException e) {
